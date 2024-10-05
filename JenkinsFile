@@ -56,7 +56,7 @@ pipeline {
             // Clean up old workspaces after build is done
             sh '''
             echo "Cleaning up old workspaces with prefix $JOB_NAME after build..."
-            find $WORKSPACE/.. -maxdepth 1 -name "${env.JOB_NAME}*" -exec rm -rf {} \\;
+            find $WORKSPACE/.. -maxdepth 1 -name "${JOB_NAME}*" -exec rm -rf {} \\;
             '''
         }
         success {
