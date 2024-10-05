@@ -49,6 +49,14 @@ pipeline {
                 build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
             }
         }
+    
+        stage('Print Job Name of Jenkins') {
+             steps {
+                 script {
+                    echo "JOB_NAME is: ${JOB_NAME}"
+                 }
+             }
+        }
     }
     
     post {
@@ -56,7 +64,7 @@ pipeline {
             // Clean up old workspaces after build is done
             sh '''
             echo "Cleaning up old workspaces with prefix $JOB_BASE_NAME after build..."
-            find $WORKSPACE/.. -maxdepth 1 -name "${JOB_BASE_NAME}*" -exec rm -rf {} \\;
+            #find $WORKSPACE/.. -maxdepth 1 -name "${JOB_BASE_NAME}*" -exec rm -rf {} \\;
             '''
         }
         success {
