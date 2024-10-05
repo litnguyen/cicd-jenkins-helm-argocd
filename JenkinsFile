@@ -31,6 +31,17 @@ pipeline {
             }
         }
 
+        stage('Clean After Build') {
+            steps {
+                script {
+                    sh '''
+                    echo 'Cleaning old workspaces ${env.JOB_NAME} after build'
+                    find $WORKSPACE/.. -maxdepth 1 -name "${env.JOB_NAME}*" -exec rm -rf {} \\;
+                    '''
+               }
+            }
+        }
+
         stage('Push Docker Image to Registry') {
             steps {
                 script {
@@ -42,7 +53,7 @@ pipeline {
                 }
             }
         }
-        
+               
         stage('Trigger ManifestUpdate') {
             steps {
                 echo "triggering updatemanifestjob"
