@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        DOCKER_IMAGE_NAME = "khangchi/node-argocd"
+        DOCKER_IMAGE_NAME = "khangchi/cicd-first-demo"
         DOCKER_IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
         
