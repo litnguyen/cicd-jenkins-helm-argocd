@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        DOCKER_IMAGE_NAME = "dahitsahadev/node-argocd"
+        DOCKER_IMAGE_NAME = "khangchi/cicd-first-demo"
         DOCKER_IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
         
@@ -11,7 +11,7 @@ pipeline {
             steps {
                 // Checkout the source code from your Git repository
                 git branch: 'main',
-                url: 'https://github.com/SahadevDahit/CICI-jenkins-helm-argocd.git'
+                url: 'https://github.com/litnguyen/cicd-jenkins-helm-argocd.git'
             }
         }
  
@@ -48,16 +48,31 @@ pipeline {
                 }
             }
         }
-        
+               
         stage('Trigger ManifestUpdate') {
             steps {
                 echo "triggering updatemanifestjob"
                 build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
             }
         }
+    
+        stage('Print Job Name of Jenkins') {
+             steps {
+                 script {
+                    echo "JOB_NAME is: ${JOB_NAME}"
+                 }
+             }
+        }
     }
     
     post {
+        always {
+            // Clean up old workspaces after build is done
+            sh '''
+            echo "Cleaning up old workspaces with prefix $JOB_BASE_NAME after build..."
+            #find $WORKSPACE/.. -maxdepth 1 -name "${JOB_BASE_NAME}*" -exec rm -rf {} \\;
+            '''
+        }
         success {
             echo 'Pipeline execution successful!'
         }
